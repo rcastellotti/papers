@@ -12,21 +12,17 @@ def getMetadata(slug, file):
         out["slug"] = slug[:-3]
         return out
 
-
 env = Environment(loader=FileSystemLoader("templates"))
 
 m = markdown.Markdown(
     extensions=["fenced_code", "codehilite", "meta", "footnotes", "toc", "tables"]
 )
 
-
 dir = "build/p"
 if os.path.exists(dir):
     shutil.rmtree(dir)
 os.makedirs(dir)
-
 papers_dir = "papers"
-
 
 def index():
     papers = []
@@ -41,23 +37,20 @@ def index():
         output_file.write(index_page)
     print(f"[+] generated: /index.html")
 
-
 def papers():
     t = env.get_template("post.html.jinja2")
     for p in os.listdir(papers_dir):
         p = os.path.join(papers_dir, p)
         if os.path.isfile(p):
             with open(p, "r") as file:
-                post = file.read()
-                posto = m.convert(post)
-            index_page = t.render(post=posto, meta=m.Meta)
+                paper = m.convert(file.read())
+            index_page = t.render(paper=paper, meta=m.Meta)
             os.makedirs("build/p", exist_ok=True)
             slug = m.Meta["slug"][0]
             print(f"[+] generated: /p/{slug}.html")
 
             with open(f"build/p/{slug}.html", "w") as output_file:
                 output_file.write(index_page)
-
 
 index()
 papers()

@@ -2,13 +2,13 @@
 <div class="flex flex-col items-center gap-y-1 text-zinc-700 dark:text-zinc-400">
     <h1 class="text-black dark:text-white leading-none">{{meta.title[0]}}</h1>
     <div class="leading-none list-outside text-sm ">
-        {% for post in meta.authors %}
-        <span class="text-xs inline-block ">{{post}} {% if not loop.last %}·{% endif %}</span>
+        {% for a in meta.authors %}
+        <span class="text-xs inline-block ">{{a}} {% if not loop.last %}·{% endif %}</span>
 
         {% endfor %}
 
     </div>
     <span clas="mx-auto">{{meta.institution[0]}}</span>
 </div>
-<article class="dark:text-gray-300 text-justify">{{post|safe}}</article>
+<article class="dark:text-gray-300 text-justify">{{paper|safe}}</article>
 {% endblock %}
