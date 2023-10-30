@@ -1,0 +1,86 @@
+  /* @tailwind base;  disable preflight*/
+  @tailwind components;
+  @tailwind utilities;
+
+  @layer components {
+    blockquote {
+      @apply w-11/12 mx-auto;
+    }
+
+    pre {
+      @apply bg-gray-100 dark:bg-zinc-900 text-xs rounded;
+    }
+
+    a:not(#hid) {
+      @apply text-blue-800 no-underline hover:underline dark:text-blue-400;
+    }
+
+    table {
+      @apply text-xs table-auto sm:text-sm w-full mx-auto border-collapse;
+    }
+ /*
+    thead>tr {
+      @apply bg-gray-200 dark:bg-zinc-900 text-left border-solid border dark:border-white border-black;
+    }
+
+    th {
+      @apply border-solid border dark:border-white border-black p-1;
+    } */
+
+    /* td {
+      @apply border border-solid dark:border-white border-black p-1;
+    } */
+
+    blockquote {
+      @apply bg-gray-100 dark:bg-zinc-900 px-2 py-1 rounded;
+    }
+
+    hr {
+      @apply max-w-sm my-5;
+    }
+
+    pre {
+      @apply rounded p-1 overflow-auto;
+    }
+
+    code {
+      @apply bg-gray-100 dark:bg-zinc-900 pt-0.5 px-0.5;
+    }
+
+    b,
+    strong {
+      @apply dark:text-white;
+    }
+
+    img {
+      @apply w-11/12 md:w-7/12 lg:w-9/12 flex mx-auto
+    }
+    svg {
+      @apply: bg-red-600 !important
+    }
+  }
+
+
+  * {
+    font-family: 'Computer Modern Sans';
+  }
+
+  pre,
+  code {
+    font-family: "Computer Modern Typewriter" !important;
+  }
+
+  pre::-webkit-scrollbar {
+    display: none;
+  }
+
+  sup,
+  sub {
+    vertical-align: baseline;
+    position: relative;
+    top: -0.4em;
+  }
+
+  sub {
+    top: 0.4em;
+  }

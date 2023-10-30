@@ -1,0 +1,20 @@
+{% extends "base.html.jinja2" %} {% block content %}
+
+<pre>
+pitch: its 2023 and we read twocolums on mobiles //  
+fucking around and finding out, i <3 reading papers //
+WIP, will update a lot, using this as a TODO-LIST
+</pre>
+
+{% for paper in papers %}
+<div class="py-0.5 flex justify-between border-b border-dashed border-t-0 border-r-0 border-l-0 border-gray-400">
+    <a href="p/{{paper.slug}}.html">{{paper.title}}</a>
+    <span>{{paper.conference}}</span>
+</div>
+{% endfor %}
+
+<div class="py-0.5 flex justify-between border-b border-dashed border-t-0 border-r-0 border-l-0 border-gray-400">
+    math mode
+    </div>
+
+{% endblock %}

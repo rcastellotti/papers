@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <link rel="stylesheet" href="/output.css">
+    <link rel="stylesheet" href="/pygments.css">
+    <link rel="stylesheet" href="/Sans/cmun-sans.css">
+    <link rel="stylesheet" href="/Typewriter/cmun-typewriter.css">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <script>
+        if (localStorage.theme === "dark") {
+            document.documentElement.classList.add("dark");
+        }
+        function toggleTheme() {
+            if (localStorage.theme !== "dark") {
+                document.documentElement.classList.add("dark");
+                localStorage.theme = "dark";
+            } else {
+                document.documentElement.classList.remove("dark");
+                localStorage.theme = "white";
+            }
+        }
+    </script>
+</head>
+
+<body
+    class="text-xs sm:text-base w-11/12 md:w-9/12 lg:w-7/12 xl:w-6/12 2xl:w-5/12 dark:bg-zinc-800 dark:text-white mx-auto">
+        {% block content %}{% endblock %}
+    <div onclick="toggleTheme()"
+        class="shadow-md fixed bottom-2 right-2 bg-gray-100 dark:bg-zinc-900 rounded w-8 h-8 flex justify-center items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-half"
+            viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+        </svg>
+    </div>
+</body>
+
+</html>
