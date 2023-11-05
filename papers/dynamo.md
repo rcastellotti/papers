@@ -330,9 +330,8 @@ Table 1 presents a summary of the list of techniques Dynamo uses and their respe
 | Handling temporary failures                                               | Sloppy Quorum and hinted handoff                        | Provides high availability and durability guarantee when some of the replicas are not available.                  |
 | Recovering from permanent failures                                        | Recovering from permanent failures                      | Synchronizes divergent replicas in the background.                                                                |
 | Membership and failure detection                                          | Gossip-based membership protocol and failure detection. | Preserves symmetry and avoids having a centralized registry for storing membership and node liveness information. |
-|                                                                           |
-| :-----------------------------------------------------------------------: |
-| ***Table 1: Summary of techniques used in Dynamo and their advantages.*** |
+
+***Table 1: Summary of techniques used in Dynamo and their advantages.***
 
 
 ## System Interface
@@ -399,9 +398,9 @@ preference list for a key is constructed by skipping positions in the ring to en
 distinct physical nodes.
 
 ## Data Versioning
-Dynamo provides eventual consistency, which allows for updates to be propagated to all replicas asynchronously. A put()
+Dynamo provides eventual consistency, which allows for updates to be propagated to all replicas asynchronously. A `put()`
 call may return to its caller before the update has been applied at all the replicas, which can result in scenarios
-where a subsequent get() operation may return an object that does not have the latest updates.. If there are no failures
+where a subsequent `get()` operation may return an object that does not have the latest updates.. If there are no failures
 then there is a bound on the update propagation times. However, under certain failure scenarios (e.g., server outages or
 network partitions), updates may not arrive at all replicas for an extended period of time.
 
@@ -507,11 +506,11 @@ Setting R and W such that R + W > N yields a quorum-like system. In this model, 
 is dictated by the slowest of the R (or W) replicas. For this reason, R and W are usually configured to be less than N,
 to provide better latency.
 
-Upon receiving a put() request for a key, the coordinator generates the vector clock for the new version and writes the
+Upon receiving a `put()` request for a key, the coordinator generates the vector clock for the new version and writes the
 new version locally. The coordinator then sends the new version (along with the new vector clock) to the N
 highest-ranked reachable nodes. If at least W-1 nodes respond then the write is considered successful.
 
-Similarly, for a get() request, the coordinator requests all existing versions of data for that key from the N
+Similarly, for a `get()`` request, the coordinator requests all existing versions of data for that key from the N
 highest-ranked reachable nodes in the preference list for that key, and then waits for R responses before returning the
 result to the client. If the coordinator ends up gathering multiple versions of the data, it returns all the versions it
 deems to be causally unrelated. The divergent versions are then reconciled and the reconciled version superseding the
@@ -603,7 +602,7 @@ logical partitions are highly unlikely. Seeds can be obtained either from static
 service. Typically seeds are fully functional nodes in the Dynamo ring.
 
 ### Failure Detection
-Failure detection in Dynamo is used to avoid attempts to communicate with unreachable peers during get() and put()
+Failure detection in Dynamo is used to avoid attempts to communicate with unreachable peers during `get()` and `put()`
 operations and when transferring partitions and hinted replicas. For the purpose of avoiding failed attempts at
 communication, a purely local notion of failure detection is entirely sufficient: node A may consider node B failed if
 node B does not respond to node A’s messages (even if B is responsive to node C's messages). In the presence of a steady
@@ -1090,13 +1089,3 @@ States). PODC '01. ACM Press, New York, NY, 170-179.
 [^24]: Welsh, M., Culler, D., and Brewer, E. 2001. SEDA: an architecture for well-conditioned, scalable internet
     services. In Proceedings of the Eighteenth ACM Symposium on Operating Systems Principles (Banff, Alberta, Canada,
     October 21 - 24, 2001). SOSP '01. ACM Press, New York, NY, 230-243.
-
-# controllare tutte le put() e le get cazzo panetto?
-
-
-
-
-
-    
-
-
