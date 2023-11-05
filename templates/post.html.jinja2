@@ -1,5 +1,5 @@
 {% include 'base.html.jinja2' %} {% block content %}
-<div class="flex flex-col items-center gap-y-1 text-zinc-700 dark:text-zinc-400">
+<div class="flex flex-col items-center gap-y-1">
     <h1 class="text-black dark:text-white leading-none">{{meta.title[0]}}</h1>
     <div class="leading-none list-outside text-sm ">
         {% for a in meta.authors %}
@@ -12,3 +12,13 @@
 </div>
 <article class="dark:text-gray-300 text-justify">{{paper|safe}}</article>
 {% endblock %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var paragraphs = document.querySelectorAll('p');
+    paragraphs.forEach(function(paragraph) {
+        if (paragraph.querySelector('img')  && paragraph.querySelector('strong')) {
+            paragraph.classList.add('has-image-strong');
+        }
+    });
+});
+</script>

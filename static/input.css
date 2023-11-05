@@ -3,6 +3,8 @@
   @tailwind utilities;
 
   @layer components {
+    p.has-image-strong{ @apply flex flex-col  gap-y-2}
+
     blockquote {
       @apply w-11/12 mx-auto;
     }
@@ -16,20 +18,20 @@
     }
 
     table {
-      @apply text-xs table-auto sm:text-sm w-full mx-auto border-collapse;
+      @apply text-xs table-auto sm:text-sm w-full mx-auto border-8 border-collapse;
     }
- /*
+ 
     thead>tr {
-      @apply bg-gray-200 dark:bg-zinc-900 text-left border-solid border dark:border-white border-black;
+      @apply text-left bg-gray-200 dark:bg-zinc-900 text-left border-8 border-solid border dark:border-white border-black ;
     }
 
     th {
-      @apply border-solid border dark:border-white border-black p-1;
-    } */
+      @apply border-8 border-solid border dark:border-white border-black p-1;
+    } 
 
-    /* td {
-      @apply border border-solid dark:border-white border-black p-1;
-    } */
+    td {
+      @apply border-8 border border-solid dark:border-white border-black p-1;
+    } 
 
     blockquote {
       @apply bg-gray-100 dark:bg-zinc-900 px-2 py-1 rounded;
@@ -53,7 +55,7 @@
     }
 
     img {
-      @apply w-11/12 md:w-7/12 lg:w-9/12 flex mx-auto
+      @apply w-full flex mx-auto
     }
     svg {
       @apply: bg-red-600 !important

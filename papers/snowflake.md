@@ -93,11 +93,8 @@ Virtual Warehouses The “muscle” of the system. This layer handles query exec
 
 Figure 1 illustrates the three architectural layers of Snowflake and their principal components.
 
-
-
-![^figure1](/snowflake/figure-1.svg) | 
-|:--:| 
-| ***Figure 1: Multi-Cluster, Shared Data Architecture*** |
+![^figure1](/snowflake/figure-1.svg)
+***Figure 1: Multi-Cluster, Shared Data Architecture***
 
 ## Data storage
 
@@ -190,9 +187,8 @@ Snowflake tolerates individual and correlated node failures at all levels of the
 In contrast, Virtual Warehouses (VWs) are not distributed across AZs. This choice is for performance reasons. High network throughput is critical for distributed query execution, and network throughput is significantly higher within the same AZ. If one of the worker nodes fails during query execution, the query fails but is transparently re-executed, either with the node immediately replaced, or with a temporarily reduced number of nodes. To accelerate node replacement, Snowflake maintains a small pool of standby nodes. (These nodes are also used for fast VW provisioning.)
 If an entire AZ becomes unavailable though, all queries running on a given VW of that AZ will fail, and the user needs to actively re-provision the VW in a different AZ. With full-AZ failures being truly catastrophic and exceedingly rare events, we today accept this one scenario of partial system unavailability, but hope to address it in the future.
 
-![^figure2](/snowflake/figure-2.svg) | 
-|:--:| 
-| ***Figure 2: Multi-Data Center Instance of Snowflake*** |
+![^figure2](/snowflake/figure-2.svg)  
+***Figure 2: Multi-Data Center Instance of Snowflake*** 
 
 ### Online Upgrade
 
@@ -202,9 +198,8 @@ Figure 3 shows a snapshot of an ongoing upgrade process. There are two versions 
 As mentioned previously, both versions of Cloud Services share the same metadata store. What is more, VWs of different versions are able to share the same worker nodes and their respective caches. Consequently, there is no need to repopulate the caches after an upgrade. The entire process is transparent to the user with no downtime or performance degradation.
 Online upgrade also has had a tremendous effect on our speed of development, and on how we handle critical bugs at Snowflake. At the time of writing, we upgrade all services once per week. That means we release features and improvements on a weekly basis. To ensure the upgrade process goes smoothly, both upgrade and downgrade are continuously tested in a special pre-production incarnation of Snowflake. In those rare cases where we find a critical bug in our production incarnation (not necessarily during an upgrade), we can very quickly downgrade to the previous version, or implement a fix and perform an out-of-schedule upgrade. This process is not as scary as it may sound, because we continuously test and exercise the upgrade/downgrade mechanism. It is highly automated and hardened at this point.
 
-![^figure3](/snowflake/figure-3.svg) | 
-|:--:| 
-| ***Figure 3: Online Upgrade*** 
+![^figure3](/snowflake/figure-3.svg)  
+***Figure 3: Online Upgrade*** 
 
 ## Semi-Structured and Schema-Less Data
 
@@ -234,9 +229,8 @@ As can be seen, the overhead of schema-less storage and query processing was aro
 In summary, the query performance over semi-structured data with relatively stable and simple schemas (i.e. the majority of machine-generated data found in practice), is nearly on par with the performance over conventional relational data, enjoying all the benefits of columnar storage, columnar execution, and pruning—without the user effort.
 
 
-![^figure4](/snowflake/figure-4.svg) | 
-|:--:| 
-| ***Figure 4: TPC-H SF100 and SF1000 Performance: Relational vs. Schema-less Row Format*** |
+![^figure4](/snowflake/figure-4.svg)  
+***Figure 4: TPC-H SF100 and SF1000 Performance: Relational vs. Schema-less Row Format*** 
 
 ## Time Travel and Cloning 
 
@@ -284,9 +278,8 @@ Snowflake uses strong AES 256-bit encryption with a hierarchical key model roote
 The Snowflake key hierarchy, shown in Figure 5, has four levels: root keys, account keys, table keys, and file keys. Each layer of (parent) keys encrypts i.e. `wraps` the layer of (child) keys below. Each account key corresponds to one user account, each table key corresponds to one database table, and each file key corresponds to one table file.
 Hierarchical key models are good security practice because they constrain the amount of data each key protects. Each layer reduces the scope of keys below it, as indicated by the boxes in Figure 5. Snowflake’s hierarchical key model ensures isolation of user data in its multi-tenant architecture, because each user account has a separate account key.
 
-![^figure5](/snowflake/figure-5.svg) | 
-|:--:| 
-| ***Figure 5: Encryption Key Hierarchy*** |
+![^figure5](/snowflake/figure-5.svg)  
+***Figure 5: Encryption Key Hierarchy*** 
 
 ### Key Life Cycle
 
@@ -300,9 +293,8 @@ An analogous scheme is implemented between account keys and table keys, and betw
 The relationship between table keys and file keys is different though. File keys are not wrapped by table keys. Instead, file keys are cryptographically derived from the combination of table key and (unique) file name. It follows that whenever a table key changes, all of its related file keys change, so the affected table files need to be re-encrypted. The big benefit of key derivation, however, is that it removes the need to create, manage, and pass around individual file keys. A system like Snowflake that handles billions of files would have to handle many gigabytes of file keys otherwise.
 We chose this design also because Snowflake’s separation of storage and compute allows it to perform re-encryption without impacting user workloads. Rekeying works in the background, using different worker nodes than queries. After files are rekeyed, Snowflake atomically updates the metadata of database tables to point to the newly encrypted files. The old files are deleted once all ongoing queries are finished.
 
-![^figure6](/snowflake/figure-6.svg) | 
-|:--:| 
-| ***Figure 5:Table Key Life Cycle*** |
+![^figure6](/snowflake/figure-6.svg)  
+***Figure 6:Table Key Life Cycle*** 
 
 ### End-to-End Security
 

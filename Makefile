@@ -1,4 +1,4 @@
-build: 
+build: clean
 	python3 app.py
 	cp -r papers/* build/
 	cp -r static/Sans/ build/Sans
