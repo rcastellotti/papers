@@ -84,13 +84,14 @@ combined to provide a single highly-available system. It demonstrates that an ev
 be used in production with demanding applications. It also provides insight into the tuning of these techniques to meet
 the requirements of production systems with very strict performance demands.
 
-The paper is structured as follows. Section 2 presents the background and Section 3 presents the related work. Section 4
-presents the system design and Section 5 describes the implementation. Section 6 details the experiences and insights
-gained by running Dynamo in production and Section 7 concludes the paper. There are a number of places in this paper
-where additional information may have been appropriate but where protecting Amazon’s business interests require us to
-reduce some level of detail. For this reason, the intra- and inter-datacenter latencies in section 6, the absolute
-request rates in section 6.2 and outage lengths and workloads in section 6.3 are provided through aggregate measures
-instead of absolute details.
+The paper is structured as follows. [Section 2](#background) presents the background and [Section 3](#related-work)
+presents the related work. [Section 4](#system-architecture) presents the system design and [Section 5](#implementation)
+describes the implementation. [Section 6](#experiences--lessons-learned) details the experiences and insights gained by
+running Dynamo in production and [Section 7](#conclusions) concludes the paper. There are a number of places in this paper where
+additional information may have been appropriate but where protecting Amazon’s business interests require us to reduce
+some level of detail. For this reason, the intra- and inter-datacenter latencies in [section 6](#experiences--lessons-learned), the absolute request
+rates in [section 6.2](#ensuring-uniform-load-distribution) and outage lengths and workloads in [section
+6.3](#divergent-versions-when-and-how-many) are provided through aggregate measures instead of absolute details.
 
 # BACKGROUND
 Amazon’s e-commerce platform is composed of hundreds of services that work in concert to deliver functionality ranging
@@ -132,7 +133,7 @@ isolation guarantees and permits only single key updates.
 *Efficiency*: The system needs to function on a commodity hardware infrastructure. In Amazon’s platform, services have
 stringent latency requirements which are in general measured at the 99.9th percentile of the distribution. Given that
 state access plays a crucial role in service operation the storage system must be capable of meeting such stringent SLAs
-(see Section 2.2 below). Services must be able to configure Dynamo such that they consistently achieve their latency and
+(see [Section 2.2](#service-level-agreements-sla) below). Services must be able to configure Dynamo such that they consistently achieve their latency and
 throughput requirements. The tradeoffs are in performance, cost efficiency, availability, and durability guarantees.
 
 Other Assumptions: Dynamo is used only by Amazon’s internal services. Its operation environment is assumed to be
@@ -365,7 +366,7 @@ used in [10, 20]): instead of mapping a node to a single point in the circle, ea
 in the ring. To this end, Dynamo uses the concept of “virtual nodes”. A virtual node looks like a single node in the
 system, but each node can be responsible for more than one virtual node. Effectively, when a new node is added to the
 system, it is assigned multiple positions (henceforth, “tokens”) in the ring. The process of fine-tuning Dynamo’s
-partitioning scheme is discussed in Section 6.
+partitioning scheme is discussed in [Section 6](#experiences--lessons-learned).
 
 Using virtual nodes has the following advantages:
 
@@ -390,7 +391,7 @@ storing it locally. Node D will store the keys that fall in the ranges (A, B], (
 
 
 The list of nodes that is responsible for storing a particular key is called the *preference list*. The system is
-designed, as will be explained in Section 4.8, so that every node in the system can determine which nodes should be in
+designed, as will be explained in [Section 4.8](#membership-and-failure-detection), so that every node in the system can determine which nodes should be in
 this list for any particular key. To account for node failures, preference list contains more than N nodes. Note that
 with the use of virtual nodes, it is possible that the first N successor positions for a particular key may be owned by
 less than N distinct physical nodes (i.e. a node may hold more than one of the first N positions). To address this, the
@@ -537,7 +538,7 @@ failures. Applications that need the highest level of availability can set W to 
 accepted as long as a single node in the system has durably written the key it to its local store. Thus, the write
 request is only rejected if all nodes in the system are unavailable. However, in practice, most Amazon services in
 production set a higher W to meet the desired level of durability. A more detailed discussion of configuring N, R and W
-follows in section 6.
+follows in [section 6](#experiences--lessons-learned).
 
 It is imperative that a highly available storage system be capable of handling the failure of an entire data center(s).
 Data center failures happen due to power outages, cooling failures, network failures, and natural disasters. Dynamo is
@@ -570,7 +571,7 @@ up-to-date. In this scheme, two nodes exchange the root of the Merkle tree corre
 host in common. Subsequently, using the tree traversal scheme described above the nodes determine if they have any
 differences and perform the appropriate synchronization action. The disadvantage with this scheme is that many key
 ranges change when a node joins or leaves the system thereby requiring the tree(s) to be recalculated. This issue is
-addressed, however, by the refined partitioning scheme described in Section 6.2.
+addressed, however, by the refined partitioning scheme described in [Section 6.2](#ensuring-uniform-load-distribution).
 
 ## Membership and Failure Detection
 ### Ring Membership
@@ -794,7 +795,7 @@ a time period of 30 minutes.***
 This section discusses how Dynamo’s partitioning scheme has evolved over time and its implications on load distribution.
 
 *Strategy 1: T random tokens per node and partition by token value*: This was the initial strategy deployed in
-production (and described in Section 4.2). In this scheme, each node is assigned T tokens (chosen uniformly at random
+production (and described in [Section 4.2](#partitioning-algorithm)). In this scheme, each node is assigned T tokens (chosen uniformly at random
 from the hash space). The tokens of all nodes are ordered according to their values in the hash space. Every two
 consecutive tokens define a range. The last token and the first token form a range that "wraps" around from the highest
 value to the lowest value in the hash space. Because the tokens are chosen randomly, the ranges vary in size. As nodes
@@ -900,7 +901,7 @@ robots (automated client programs) and rarely by humans. This issue is not discu
 nature of the story.
 
 ## Client-driven or Server-drive Coordination
-As mentioned in Section 5, Dynamo has a request coordination component that uses a state machine to handle incoming
+As mentioned in [Section 5](#implementation), Dynamo has a request coordination component that uses a state machine to handle incoming
 requests. Client requests are uniformly assigned to nodes in the ring by a load balancer. Any Dynamo node can act as a
 coordinator for a read request. Write requests on the other hand will be coordinated by a node in the key’s current
 preference list. This restriction is due to the fact that these preferred nodes have the added responsibility of
@@ -1089,3 +1090,13 @@ States). PODC '01. ACM Press, New York, NY, 170-179.
 [^24]: Welsh, M., Culler, D., and Brewer, E. 2001. SEDA: an architecture for well-conditioned, scalable internet
     services. In Proceedings of the Eighteenth ACM Symposium on Operating Systems Principles (Banff, Alberta, Canada,
     October 21 - 24, 2001). SOSP '01. ACM Press, New York, NY, 230-243.
+
+# controllare tutte le put() e le get cazzo panetto?
+
+
+
+
+
+    
+
+
