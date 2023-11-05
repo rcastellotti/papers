@@ -4,9 +4,7 @@
     <div class="leading-none list-outside text-sm ">
         {% for a in meta.authors %}
         <span class="text-xs inline-block ">{{a}} {% if not loop.last %}·{% endif %}</span>
-
         {% endfor %}
-
     </div>
     <span clas="mx-auto">{{meta.institution[0]}}</span>
 </div>

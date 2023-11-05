@@ -148,7 +148,7 @@ platform needs to deliver its functionality with even tighter bounds. Clients an
 Agreement (SLA), a formally negotiated contract where a client and a service agree on several system-related
 characteristics, which most prominently include the client’s expected request rate distribution for a particular API and
 the expected service latency under those conditions. An example of a simple SLA is a service guaranteeing that it
-willprovide a response within 300ms for 99.9% of its requests for a peak client load of 500 requests per second.
+will provide a response within 300ms for 99.9% of its requests for a peak client load of 500 requests per second.
 
 In Amazon’s decentralized service oriented infrastructure, SLAs play an important role. For example a page request to
 one of the e-commerce sites typically requires the rendering engine to construct its response by sending requests to
@@ -195,7 +195,7 @@ to provide a strongly consistent data access interface. To achieve this level of
 forced to tradeoff the availability of the data under certain failure scenarios. For instance, rather than dealing with
 the uncertainty of the correctness of an answer, the data is made unavailable until it is absolutely certain that it is
 correct. From the very early replicated database works, it is well known that when dealing with the possibility of
-network failures, strong consistency and high data availability cannot be achieved simultaneously [2, 11]. As such
+network failures, strong consistency and high data availability cannot be achieved simultaneously [^2], [^11]. As such
 systems and applications need to be aware which properties can be achieved under which conditions.
 
 For systems prone to server and network failures, availability can be increased by using optimistic replication
@@ -231,7 +231,9 @@ time, with minimal impact on both operators of the system and the system itself.
 
 *Symmetry*: Every node in Dynamo should have the same set of responsibilities as its peers; there should be no
 distinguished node or nodes that take special roles or extra set of responsibilities. In our experience, symmetry
-simplifies the process of system provisioning and maintenance. Decentralization: An extension of symmetry, the design
+simplifies the process of system provisioning and maintenance. 
+
+*Decentralization*: An extension of symmetry, the design
 should favor decentralized peer-to-peer techniques over centralized control. In the past, centralized control has
 resulted in outages and the goal is to avoid it as much as possible. This leads to a simpler, more scalable, and more
 available system.
@@ -311,7 +313,7 @@ complex relational schema (supported by traditional databases). Fourth, Dynamo i
 applications that require at least 99.9% of read and write operations to be performed within a few hundred milliseconds.
 To meet these stringent latency requirements, it was imperative for us to avoid routing requests through multiple nodes
 (which is the typical design adopted by several distributed hash table systems such as Chord and Pastry). This is
-because multi- hop routing increases variability in response times, thereby increasing the latency at higher
+because multi-hop routing increases variability in response times, thereby increasing the latency at higher
 percentiles. Dynamo can be characterized as a zero-hop DHT, where each node maintains enough routing information locally
 to route a request to the appropriate node directly.
 
@@ -362,7 +364,7 @@ and other nodes remain unaffected.
 The basic consistent hashing algorithm presents some challenges. First, the random position assignment of each node on
 the ring leads to non-uniform data and load distribution. Second, the basic algorithm is oblivious to the heterogeneity
 in the performance of nodes. To address these issues, Dynamo uses a variant of consistent hashing (similar to the one
-used in [10, 20]): instead of mapping a node to a single point in the circle, each node gets assigned to multiple points
+used in [^10], [^20]): instead of mapping a node to a single point in the circle, each node gets assigned to multiple points
 in the ring. To this end, Dynamo uses the concept of “virtual nodes”. A virtual node looks like a single node in the
 system, but each node can be responsible for more than one virtual node. Effectively, when a new node is added to the
 system, it is assigned multiple positions (henceforth, “tokens”) in the ring. The process of fine-tuning Dynamo’s
@@ -401,7 +403,7 @@ distinct physical nodes.
 ## Data Versioning
 Dynamo provides eventual consistency, which allows for updates to be propagated to all replicas asynchronously. A `put()`
 call may return to its caller before the update has been applied at all the replicas, which can result in scenarios
-where a subsequent `get()` operation may return an object that does not have the latest updates.. If there are no failures
+where a subsequent `get()` operation may return an object that does not have the latest updates. If there are no failures
 then there is a bound on the update propagation times. However, under certain failure scenarios (e.g., server outages or
 network partitions), updates may not arrive at all replicas for an extended period of time.
 
@@ -511,7 +513,7 @@ Upon receiving a `put()` request for a key, the coordinator generates the vector
 new version locally. The coordinator then sends the new version (along with the new vector clock) to the N
 highest-ranked reachable nodes. If at least W-1 nodes respond then the write is considered successful.
 
-Similarly, for a `get()`` request, the coordinator requests all existing versions of data for that key from the N
+Similarly, for a `get()` request, the coordinator requests all existing versions of data for that key from the N
 highest-ranked reachable nodes in the preference list for that key, and then waits for R responses before returning the
 result to the client. If the coordinator ends up gathering multiple versions of the data, it returns all the versions it
 deems to be causally unrelated. The divergent versions are then reconciled and the reconciled version superseding the
@@ -607,7 +609,7 @@ Failure detection in Dynamo is used to avoid attempts to communicate with unreac
 operations and when transferring partitions and hinted replicas. For the purpose of avoiding failed attempts at
 communication, a purely local notion of failure detection is entirely sufficient: node A may consider node B failed if
 node B does not respond to node A’s messages (even if B is responsive to node C's messages). In the presence of a steady
-rate of client requests generating inter- node communication in the Dynamo ring, a node A quickly discovers that a node
+rate of client requests generating inter-node communication in the Dynamo ring, a node A quickly discovers that a node
 B is unresponsive when B fails to respond to a message; Node A then uses alternate nodes to service requests that map to
 B's partitions; A periodically retries B to check for the latter's recovery. In the absence of client requests to drive
 traffic between two nodes, neither node really needs to know whether the other is reachable and responsive.
@@ -650,7 +652,7 @@ Store.
 
 [^oracle]: <http://www.oracle.com/database/berkeley-db.html>
 
-The request coordination component is built on top of an event- driven messaging substrate where the message processing
+The request coordination component is built on top of an event-driven messaging substrate where the message processing
 pipeline is split into multiple stages similar to the SEDA architecture [^24]. All communications are implemented using
 Java NIO channels. The coordinator executes the read and write requests on behalf of clients by collecting data from one
 or more nodes (in the case of reads) or storing data at one or more nodes (for writes). Each client request results in
@@ -710,7 +712,7 @@ deemed successful and returned to the clients even if they are not processed by 
 introduces a vulnerability window for durability when a write request is successfully returned to the client even though
 it has been persisted at only a small number of nodes.
 
-Traditional wisdom holds that durability and availability go hand- in-hand. However, this is not necessarily true here.
+Traditional wisdom holds that durability and availability go hand-in-hand. However, this is not necessarily true here.
 For instance, the vulnerability window for durability can be decreased by increasing W. This may increase the
 probability of rejecting requests (thereby decreasing availability) because more storage hosts need to be alive to
 process a write request.
@@ -777,7 +779,7 @@ the impact of different partitioning strategies on load distribution.
 
 To study the load imbalance and its correlation with request load, the total number of requests received by each node
 was measured for a period of 24 hours - broken down into intervals of 30 minutes. In a given time window, a node is
-considered to be “in- balance”, if the node’s request load deviates from the average load by a value a less than a
+considered to be “in-balance”, if the node’s request load deviates from the average load by a value a less than a
 certain threshold (here 15%). Otherwise the node was deemed “out-of-balance”. Figure 6 presents the fraction of nodes
 that are “out-of-balance” (henceforth, “imbalance ratio”) during this time period. For reference, the corresponding
 request load received by the entire system during this time period is also plotted. As seen in the figure, the imbalance
@@ -928,7 +930,7 @@ when some members are unreachable), it will immediately refresh its membership i
 Table 2 shows the latency improvements at the 99.9th percentile and averages that were observed for a period of 24 hours
 using client-driven coordination compared to the server-driven approach. As seen in the table, the client-driven
 coordination approach reduces the latencies by at least 30 milliseconds for 99.9th percentile latencies and decreases
-the average by 3 to 4 milliseconds. The latency improvement is because the client- driven approach eliminates the
+the average by 3 to 4 milliseconds. The latency improvement is because the client-driven approach eliminates the
 overhead of the load balancer and the extra network hop that may be incurred when a request is assigned to a random
 node. As seen in the table, average latencies tend to be significantly lower than latencies at the 99.9th percentile.
 This is because Dynamo’s storage engine caches and write buffer have good hit ratios. Moreover, since the load balancers
@@ -943,7 +945,7 @@ percentile than the average.
 
 ***Table 2: Performance of client-driven and server-driven coordination approaches.***
 
-## Balancig background vs. foreground tasks
+## Balancing background vs. foreground tasks
 
 Each node performs different kinds of background tasks for replica synchronization and data handoff (either due to
 hinting or adding/removing nodes) in addition to its normal foreground put/get operations. In early production settings,
@@ -994,7 +996,7 @@ them to tune the parameters N, R, and W.
 
 The production use of Dynamo for the past year demonstrates that decentralized techniques can be combined to provide a
 single highly-available system. Its success in one of the most challenging application environments shows that an
-eventual- consistent storage system can be a building block for highly- available applications.
+eventual-consistent storage system can be a building block for highly-available applications.
 
 # ACKNOWLEDGEMENTS
 The authors would like to thank Pat Helland for his contribution to the initial design of Dynamo. We would also like to
