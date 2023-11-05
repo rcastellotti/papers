@@ -1090,13 +1090,3 @@ States). PODC '01. ACM Press, New York, NY, 170-179.
 [^24]: Welsh, M., Culler, D., and Brewer, E. 2001. SEDA: an architecture for well-conditioned, scalable internet
     services. In Proceedings of the Eighteenth ACM Symposium on Operating Systems Principles (Banff, Alberta, Canada,
     October 21 - 24, 2001). SOSP '01. ACM Press, New York, NY, 230-243.
-
-# controllare tutte le put() e le get cazzo panetto?
-
-
-
-
-
-    
-
-
