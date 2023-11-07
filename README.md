@@ -1,8 +1,7 @@
-
 # [papers.rcastellotti.dev](https://papers.rcastellotti.dev)
 
 ## run locally
-`watchexec -r -e py,jinja2,md,css -- make` (`brew install watchexec` or GFY [^1]) since I prolly won't implement hot-reloading
+`watchexec -r -e py,jinja2,md,css -- make` (`brew install watchexec` or GFY [^1])
 
 ## process to convert a paper from pdf to this beauty
 + go paragraph by paragraph (typeset correctly `\textit` and similar and math)
