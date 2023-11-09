@@ -90,8 +90,7 @@ To make this more tangible, consider an example of a system that is
 *not* linearizable. See the following diagram (sneak preview from an
 unreleased chapter of [my book](http://dataintensive.net/)):
 
-![Illustration of a non-linearizable sequence of
-events](https://martin.kleppmann.com/2015/05/linearizability.png)
+![Illustration of a non-linearizable sequence of events](https://martin.kleppmann.com/2015/05/linearizability.png)
 
 This diagram shows Alice and Bob, who are in the same room, both checking their phones to see the outcome of the [2014
 football world cup final](http://www.bbc.co.uk/sport/0/football/28181689). Just after the final score is announced,
