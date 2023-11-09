@@ -1,5 +1,5 @@
 ---
-title: Please
+title: Please stop calling databases CP or AP
 slug: please-stop-calling-dbs-cp-or-ap
 draft: False
 conference: none
