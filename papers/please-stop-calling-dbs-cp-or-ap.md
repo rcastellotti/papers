@@ -9,7 +9,7 @@ institution: martin.kleppmann.com
 
 [TOC]
 
-Published by Martin Kleppmann on 11 May 2015.
+Published by Martin Kleppmann on 11 May 2015 [here](https://martin.kleppmann.com/2015/05/11/please-stop-calling-databases-cp-or-ap.html).
 
 In his excellent blog post [Notes on Distributed Systems for Young
 Bloods](https://www.somethingsimilar.com/2013/01/14/notes-on-distributed-systems-for-young-bloods/), Jeff Hodges
