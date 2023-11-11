@@ -1,4 +1,7 @@
+{% block title %}<title>{{meta.title[0]}}</title>{% endblock %} 
+
 {% include 'base.html.jinja2' %} {% block content %}
+
 <div class="flex flex-col items-center gap-y-1">
     <h1 class="text-black dark:text-white leading-none">{{meta.title[0]}}</h1>
     <div class="leading-none list-outside text-sm ">
